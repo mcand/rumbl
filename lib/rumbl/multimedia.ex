@@ -24,7 +24,7 @@ defmodule Rumbl.Multimedia do
   alias Rumbl.Multimedia.Category
 
   def create_category!(name) do
-    Repo.insert!(%Category{name: name}, on_conflict: :nothing)
+    Repo.insert!(%Category{name: name})
   end
 
   @doc """
