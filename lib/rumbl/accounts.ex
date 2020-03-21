@@ -22,6 +22,12 @@ defmodule Rumbl.Accounts do
     Repo.all(User)
   end
 
+  import Ecto.Query
+
+  def list_users_with_ids(ids) do
+    Repo.all(from(u in User, where: u.id in ^ids))
+  end
+
   def change_user(%User{} = user) do
     User.changeset(user, %{})
   end

@@ -1,5 +1,5 @@
 import Player from "./player"
-
+import {Presence} from "phoenix"
 let Video = {
 
   init(socket, element){ if(!element){ return }
@@ -14,10 +14,20 @@ let Video = {
   onReady(videoId, socket){
     let msgContainer = document.getElementById("msg-container")
     let msgInput     = document.getElementById("msg-input")
+    let userList     = document.getElementById("user-list")
     let postButton   = document.getElementById("msg-submit")
     let lastSeenId   = 0
     let vidChannel   = socket.channel("videos:" + videoId, () => {
       return {last_seen_id: lastSeenId}
+    })
+
+    let presence = new Presence(vidChannel)
+
+    presence.onSync(() => {
+      userList.innerHTML = presence.list((id, {user: user, metas: [first, ...rest]}) => {
+        let count = rest.length + 1
+        return `<li>${user.username}: (${count})</li>`
+      }).join("")
     })
 
     postButton.addEventListener("click", e => {
